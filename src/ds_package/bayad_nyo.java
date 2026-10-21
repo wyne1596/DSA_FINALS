@@ -53,7 +53,7 @@ class Tenant {
     	int totalPayments = this.payments.size();
     	
     	return String.format(
-    			"Tenant [ID: %s, Name: %s, Unit: %s, Monthly Rent: ₱%.2f, Balance: ₱%.2f, Payments: %d]",
+    			"Tenant [ID: %s | Name: %s | Unit: %s | Monthly Rent: ₱%.2f | Balance: ₱%.2f | Payments: %d]",
 				this.tenantID,
 				this.tenantName,
 				this.unitNo,
@@ -96,7 +96,7 @@ class UtilityBill{
         String status = this.paid ? "Paid" : "Unpaid";
 
         return String.format(
-            "UtilityBill [ID: %s, Type: %s, Month: %s, Amount: ₱%.2f, Status: %s]",
+            "UtilityBill [ID: %s | Type: %s | Month: %s | Amount: ₱%.2f | Status: %s]",
             this.billID,
             this.utilityType,
             this.billingMonth,
@@ -130,7 +130,7 @@ class Payment{
     @Override
     public String toString() {
         return String.format(
-            "Payment [ID: %s, Date: %s, Amount: ₱%.2f, Applied To: %s]",
+            "Payment [ID: %s | Date: %s | Amount: ₱%.2f | Applied To: %s]",
             this.paymentID,
             this.date,
             this.amount,
