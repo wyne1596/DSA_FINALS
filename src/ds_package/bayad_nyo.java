@@ -11,6 +11,7 @@ interface OwnList<T>{
 	boolean isEmpty();
 }
 
+//Replacement to para sa java.util.ArrayList
 class OwnArrayList<T> implements OwnList<T>{
 	private Object[] data = new Object[10];
 	private int size = 0;
@@ -51,7 +52,7 @@ class OwnArrayList<T> implements OwnList<T>{
 	public int size() {return size;}
 	public boolean isEmpty() {return size == 0;}
 	
-	public void check(int index) {
+	private void check(int index) {
 		if(index < 0 || index >= size) throw new IndexOutOfBoundsException();
 	}
 	
@@ -64,15 +65,16 @@ class OwnArrayList<T> implements OwnList<T>{
 }
 //Thank you Claude
 
+//this is ung data for Tenant
+//nandito yung PersoDetails, balance, and payment and bill history
 class Tenant {
-	private String tenantID;
+	private String tenantID;	//unique ID to na gamit din sa HASH TABLE key naka read only lang to so unchangeable
 	private String tenantName;
-	private String unitNo;
+	private String unitNo;		//read only lang din to
 	private double monthlyRent;
-	private double currentBalance;
+	private double currentBalance;	// eto yung amount na di pa nila nababayaran
 	private OwnList<Payment> payments;
 	private OwnList<UtilityBill> utilityBills;
-	
 	
 	public String getTenantID() {return tenantID;}
 	
@@ -90,6 +92,8 @@ class Tenant {
 	
 	public void setCurrentBalance(double currentBalance) {this.currentBalance = currentBalance;}
 	
+	// eto yung responsible sa pag create ng tenant na naka 
+	// 0 yung balance and wala pang payment made and yung list ng bill nila
 	public Tenant(String tenantID, String tenantName, String unitNo, double monthlyRent) {
 		this.tenantID = tenantID;
 		this.tenantName = tenantName;
@@ -106,10 +110,15 @@ class Tenant {
 	
 	public OwnList<UtilityBill> getUtilityBills(){return utilityBills;}
 	
+	// eto yung nag rerecord ng payment ni tenant, like history
 	public void addPayment(Payment payment) {this.payments.add(payment);}
-
+	
+	// same nag rerecord
     public void addUtilityBill(UtilityBill bill) {this.utilityBills.add(bill);}
     
+    // eto yung responsible dun sa print. 
+    // pinapakita lng din pala sa payment kung ilang beses na sila nag bayad
+    // hindi yung full history ng bayad nila
     @Override
     public String toString() {
     	int totalPayments = this.payments.size();
@@ -126,12 +135,13 @@ class Tenant {
     }
 }
 
+// eto yung utility bill na ichacharge sa tenant
 class UtilityBill{
 	private String billID;
-	private String utilityType;
+	private String utilityType;		//example yung Water and Electricity
 	private double amount;
-	private String billingMonth;
-	private boolean paid;
+	private String billingMonth;	// YYYY-MM format dapat to
+	private boolean paid;			// naka false to sya until sa masettle ni tenant ung bill nya
 	
 	public String getBillID() {return billID;}
 
@@ -143,8 +153,10 @@ class UtilityBill{
 
     public boolean isPaid() {return paid;}
     
+    // eto yung responsible/ nag mamark na nabayaran na ni tenant lahat ng bill nya
     public void markAsPaid() {this.paid = true;}
     
+    // eto yung gumagawa sa bill. Lahat ng bagong bill is unpaid start
     public UtilityBill(String billID, String utilityType, double amount, String billingMonth) {
         this.billID = billID;
         this.utilityType = utilityType;
@@ -153,6 +165,7 @@ class UtilityBill{
         this.paid = false; 
     }
     
+    // eto rin yung print, yung status nya is Paid or Unpaid para di True or False yng maprint
     @Override
     public String toString() {
         String status = this.paid ? "Paid" : "Unpaid";
@@ -168,11 +181,12 @@ class UtilityBill{
     }
 }
 
+// eto yung Payment ni tenant. Lahat naka final na para di mabago yung payment
 class Payment{
 	private final String paymentID;
-    private final String date; 
+    private final String date; 		// format neto: YYYY-MM-DD
     private final double amount;
-    private final String appliedTo; 
+    private final String appliedTo; // dito yung if nagbayad sila for Rent or sa Utilities
 
     public String getPaymentID() {return paymentID;}
 
@@ -182,6 +196,7 @@ class Payment{
 
     public String getAppliedTo() {return appliedTo;}
     
+    // dito nagagawa yung payment record
     public Payment(String paymentID, String date, double amount, String appliedTo) {
         this.paymentID = paymentID;
         this.date = date;
@@ -189,6 +204,7 @@ class Payment{
         this.appliedTo = appliedTo;
     }
     
+    //print ulet ng payment history
     @Override
     public String toString() {
         return String.format(
@@ -201,27 +217,36 @@ class Payment{
     }
 }
 
+
+/* 
+ 									PAKI STUDY NG HASH TABLE
+*/
+
 //di pa sure dito sa hash table
 class TenantHashTable{
-	private static final int INITIAL_CAPACITY = 11;
-	private static final double LOAD_FACTOR_THRESHOLD = 0.75;
+	private static final int INITIAL_CAPACITY = 11;				// eto yung bucket ng hashtable	
+	private static final double LOAD_FACTOR_THRESHOLD = 0.75;	//
 	
-	private Node[] table;
-	private int size;
+	private Node[] table;	//
+	private int size;		// kung ilan na yung tenants na naka store
 	
+	// responsible sa paggawa ng empty table, yung initial capacity lang din slots nya
 	public TenantHashTable() {
 		this.table = new Node[INITIAL_CAPACITY];
 		this.size = 0;
 	}
 	
+	// di kopa gets pano to gumagana but
+	// eto yung nag coconvert sa key
 	private int hash(String key) {
 		int rawHashCode = key.hashCode();
 		int positiveHashCode = rawHashCode & 0x7fffffff;
 		return positiveHashCode % this.table.length;
 	}
 	
+	// eto yung entry sa chain ng buckets
 	private static class Node {
-		private final String key;
+		private final String key;	// dito yung tenant ID as the key, di na nababago if nalagay na
 		private Tenant value;
 		private Node next;
 		
@@ -232,6 +257,8 @@ class TenantHashTable{
 		}
 	}
 	
+	// eto yung nag aadd ng tenant sa buong table. True return if bago yung key. False return if nireplaced lang yung existing tenant
+	// eto din pala yung nag reresize if yung load factor is exceeded na
 	public boolean put(String key, Tenant value) {
 		int index = this.hash(key);
 	    Node current = this.table[index];
@@ -250,34 +277,40 @@ class TenantHashTable{
 	    
 	    this.size++;
 	    
+	    // this, igogrow nya ung table if full na
+	    if((double) size / table.length > LOAD_FACTOR_THRESHOLD) {
+	    	resize();
+	    }
 	    return true;    
 	}
 	
+	// eto yung rereturn nya yung tenant/ mga values ng tenant if cinall ung key. Null naman if wala yng key na cinall
 	public Tenant get(String key) {
 	    int index = this.hash(key);
-	    
 	    Node current = this.table[index];
+	    
 	    while (current != null) {
 	        if (current.key.equals(key)) {
 	            return current.value; 
 	        }
 	        current = current.next; 
-	    }
-	    
+	    } 
 	    return null; 
 	}
 	
-	public int size() {
-	    return this.size;
-	}
+	// dito yung gano na karaming tenant naka stored sa table
+	public int size() {return this.size;}
 	
+	// true to sya if walang tenant na naka stored
 	public boolean isEmpty() {return this.size == 0;}
 	
+	// true to sya if yung tenant with the same key exists sa table
 	public boolean containsKey(String key) {
 		if(get(key) != null) return true;
 		else return false;
 	}
 	
+	// eto yung responsible sa pag remove ng tenant. mag rereturn to ng true if naremoved yung tenant, and false if wala yung tenant na yon sa table
 	public boolean remove(String key) {
 		Node previous = null;
 		int index = this.hash(key);
@@ -300,15 +333,59 @@ class TenantHashTable{
 		return false;
 	}
 	
-	//Need pa ng getAll() method
-	//and resize() method
-	//check if may bugs
+	// eto yung nag rereturn ng mga tenant as a list, hindi sya in order since hindi naman insertion tong HashTable
+	public OwnList<Tenant> getAll(){
+		OwnList<Tenant> result = new OwnArrayList<>();
+		
+		for(int i=0; i < table.length; i++) {
+			Node current = table[i];
+			
+			while(current != null) {
+				result.add(current.value);
+				current = current.next;
+			}
+		}
+		return result;
+	}
+	
+	// eto nag dodouble sa capacity and nag momove sa lahat ng nasa table to thei new bucket
+	// di ko masyadong gets to
+	private void resize() {
+		Node[] oldTable = table;
+		int newCapacity = oldTable.length * 2 +1;
+		this.table = new Node[newCapacity];
+		
+		for(int i=0; i < oldTable.length; i++) {
+			Node current = oldTable[i];
+			
+			while(current != null) {
+				Node nextNode = current.next;
+				int index = hash(current.key);
+				current.next = table[index];
+				table[index] = current;
+				current = nextNode;
+			}
+		}
+	}
 }
 
 public class bayad_nyo {
-
+	
 	public static void main(String[] args) {
-
+//		TenantHashTable table = new TenantHashTable();
+//		OwnList<Tenant> list = new OwnArrayList<>();
+//	
+//		table.put("T-001", new Tenant("T-001", "Anna Cruz", "A20", 5000.00));
+//		table.put("T-002", new Tenant("T-002", "Juan Tamad", "B13", 2500.00));
+//		table.put("T-022", new Tenant("T-022", "Wyne Ben", "C01", 2000.00));
+//
+//		list = table.getAll();
+//		for(int i=0; i<list.size();i++){
+//			System.out.println(list.get(i));
+//		}
+//	Try lang to if nagana put and getAll
+		
+// 	PAKI TEST NALANG NG PAYMENT AND UTILITYBILL
 	}
 
 }
