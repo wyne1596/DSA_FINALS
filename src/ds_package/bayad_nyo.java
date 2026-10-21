@@ -1,6 +1,67 @@
 package ds_package;
-import java.util.List;
-import java.util.ArrayList;
+
+//Thank you Claude
+interface OwnList<T>{
+	void add(T item);
+	void add(int index, T item);
+	T get(int index);
+	T set(int index, T item);
+	T remove(int index);
+	int size();
+	boolean isEmpty();
+}
+
+class OwnArrayList<T> implements OwnList<T>{
+	private Object[] data = new Object[10];
+	private int size = 0;
+	
+	public void add(T item) {
+		add(size, item);
+	}
+	
+	public void add(int index, T item) {
+		if(index < 0 || index > size) throw new IndexOutOfBoundsException();
+		if(size == data.length) grow();
+		for(int i = size; i > index; i--) data[i] = data[i - 1];
+		data[index] = item;
+		size++;
+	}	
+	
+	@SuppressWarnings("unchecked")
+	public T get(int index) {
+		check(index);
+		return (T) data[index];
+	}
+	
+	public T set(int index, T item) {
+		check(index);
+		T old = get(index);
+		data[index] = item;
+		return old;
+	}
+	
+	public T remove(int index) {
+		check(index);
+		T old = get(index);
+		for(int i = index; i < size - 1; i++) data[i] = data[i+1];
+		return old;
+	}
+	
+	public int size() {return size;}
+	public boolean isEmpty() {return size == 0;}
+	
+	public void check(int index) {
+		if(index < 0 || index >= size) throw new IndexOutOfBoundsException();
+	}
+	
+	private void grow() {
+		Object[] bigger = new Object[data.length * 2];
+		for(int i=0; i < size ; i++) bigger[i] = data[i];
+		data = bigger;
+	}
+	
+}
+//Thank you Claude
 
 class Tenant {
 	private String tenantID;
@@ -8,8 +69,8 @@ class Tenant {
 	private String unitNo;
 	private double monthlyRent;
 	private double currentBalance;
-	private List<Payment> payments;
-	private List<UtilityBill> utilityBills;
+	private OwnList<Payment> payments;
+	private OwnList<UtilityBill> utilityBills;
 	
 	
 	public String getTenantID() {return tenantID;}
@@ -36,13 +97,13 @@ class Tenant {
 		
 		this.currentBalance = 0.0;
 		
-		this.payments = new ArrayList<>();
-		this.utilityBills = new ArrayList<>();
+		this.payments = new OwnArrayList<>();
+		this.utilityBills = new OwnArrayList<>();
 	}
 	
-	public List<Payment> getPayments(){return payments;}
+	public OwnList<Payment> getPayments(){return payments;}
 	
-	public List<UtilityBill> getUtilityBills(){return utilityBills;}
+	public OwnList<UtilityBill> getUtilityBills(){return utilityBills;}
 	
 	public void addPayment(Payment payment) {this.payments.add(payment);}
 
@@ -211,6 +272,15 @@ class TenantHashTable{
 	
 	public boolean isEmpty() {
 	    return this.size == 0;
+	}
+	
+	public boolean containsKey(String key) {
+		if(get(key) != null) return true;
+		else return false;
+	}
+	
+	public void remove(String key) {
+		
 	}
 }
 
