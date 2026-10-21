@@ -44,6 +44,7 @@ class OwnArrayList<T> implements OwnList<T>{
 		check(index);
 		T old = get(index);
 		for(int i = index; i < size - 1; i++) data[i] = data[i+1];
+		data[--size] = null;
 		return old;
 	}
 	
@@ -233,8 +234,8 @@ class TenantHashTable{
 	
 	public boolean put(String key, Tenant value) {
 		int index = this.hash(key);
-
 	    Node current = this.table[index];
+	    
 	    while (current != null) {
 	        if (current.key.equals(key)) {
 	            current.value = value; 
@@ -270,18 +271,38 @@ class TenantHashTable{
 	    return this.size;
 	}
 	
-	public boolean isEmpty() {
-	    return this.size == 0;
-	}
+	public boolean isEmpty() {return this.size == 0;}
 	
 	public boolean containsKey(String key) {
 		if(get(key) != null) return true;
 		else return false;
 	}
 	
-	public void remove(String key) {
+	public boolean remove(String key) {
+		Node previous = null;
+		int index = this.hash(key);
+		Node current = this.table[index];
 		
+		while(current != null) {
+			if(current.key.equals(key)) {
+				if(previous == null) {
+					table[index] = current.next;
+				}
+				else {
+					previous.next = current.next;
+				}
+				size--;
+				return true;
+			}
+			previous = current;
+			current = current.next;
+		}	
+		return false;
 	}
+	
+	//Need pa ng getAll() method
+	//and resize() method
+	//check if may bugs
 }
 
 public class bayad_nyo {
