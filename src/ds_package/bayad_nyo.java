@@ -380,16 +380,16 @@ public class bayad_nyo {
 // 	PAKI TEST NALANG NG PAYMENT, UTILITYBILL, and TENANTHASHTABLE
 		
 		/*	example code format:
-				check("Ano yung tinitest", object.method() == something) if numbers
-				check("Ano yung tinitest", object.method().equals("something")) if String
-				check("Ano yung tinitest", object.method()) if boolean (true/false) | !object.method() if expecting false
-				check("Ano yung tinitest", object.method() == null) if expecting null
-
+				check("Ano yung tinitest", object.method() == something) 			if numbers
+				check("Ano yung tinitest", object.method().equals("something")) 	if String
+				check("Ano yung tinitest", object.method()) 						if boolean (true/false) | !object.method() if expecting false
+				check("Ano yung tinitest", object.method() == null) 				if expecting null
+				
 			expected ouput:
 				PASS: Ano yung tinitest
 				FAIL: Ano yung tinitest
 
-			/pede gumamit ng AI or magtanong sa programmer if nahihirapan
+			PEDE gumamit ng AI or magtanong sa programmer if nahihirapan
 		*/
 		
 		Tenant tenant = new Tenant("T001", "Juan Tamad", "A02", 2500.00);
