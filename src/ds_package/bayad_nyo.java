@@ -392,8 +392,8 @@ class TenantHashTable{
 
 public class bayad_nyo {
 	
-	static void check(String label, boolean condition){
-		System.out.println((condition ? "PASS: ":"FAIL: ") + label);
+	static void check(int num, String label, boolean condition){
+		System.out.println((condition ? "PASS: ":"FAIL: ") + "No. " +num+ " - "+label);
 	}
 
 	public static void main(String[] args) {
@@ -401,23 +401,24 @@ public class bayad_nyo {
 // 	PAKI TEST NALANG NG PAYMENT, UTILITYBILL, and TENANTHASHTABLE
 		
 		/*	example code format:
-				check("No. # - Ano yung tinitest", object.method() == something) 			if numbers
-				check("No. # - Ano yung tinitest", object.method().equals("something")) 	if String
-				check("No. # - Ano yung tinitest", object.method()) 						if boolean (true/false) 
-												| !object.method() 							if expecting false
+				check(No.#, "Ano yung tinitest", object.method() == something) 			if numbers
+				check(No.#, "Ano yung tinitest", object.method().equals("something")) 	if String
+				check(No.#, "Ano yung tinitest", object.method()) 						if boolean (true/false) 
+												!object.method() 						if expecting false
 												
-				check("No. # - Ano yung tinitest", object.method() == null) 				if expecting null
-				
-			expected ouput:
-				PASS: Ano yung tinitest
-				FAIL: Ano yung tinitest
+				check(No.#, "Ano yung tinitest", object.method() == null) 				if expecting null
+																  != null				if NOT expecting null
+			
+			expected output:
+				PASS: No. # - Ano yung tinitest
+				FAIL: No. # - Ano yung tinitest
 
 			PEDE gumamit ng AI or magtanong sa programmer if nahihirapan
 		*/
 		
 		Tenant tenant = new Tenant("T001", "Juan Tamad", "A02", 2500.00);
 		//DITO START TEST SA Tenant class
-	
+		check(1, "No tenant T001", !tenant.getTenantID().equals("T001"));
 		
 		UtilityBill bill = new UtilityBill("B001", "Electricity", 350.00, "2026-10");
 		//DITO START TEST SA UtilityBill class
@@ -429,8 +430,7 @@ public class bayad_nyo {
 		
 		TenantHashTable table = new TenantHashTable();
 		//DITO START TEST SA TenantHashTable class
-		
-//		table.printTable();
+
 		
 	}
 
