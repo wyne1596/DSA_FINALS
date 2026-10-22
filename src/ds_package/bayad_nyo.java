@@ -367,12 +367,33 @@ class TenantHashTable{
 			}
 		}
 	}
+	
+//	public void printTable() {
+//		System.out.println("Capacity: " + table.length + " | Size: " + size);
+//		
+//		for(int i=0; i < table.length; i++) {
+//			System.out.print("["+i+"]");
+//			Node current = table[i];
+//			
+//			if(current == null) {
+//				System.out.println("Empty");
+//			}
+//			
+//			while(current != null) {
+//				System.out.println(current.key);
+//				if(current.next != null) {
+//					current = current.next;
+//				}
+//			System.out.println();
+//			}
+//		}
+//	}
 }
 
 public class bayad_nyo {
 	
 	static void check(String label, boolean condition){
-		System.out.println((condition ? "PASS":"FAIL" + label));
+		System.out.println((condition ? "PASS: ":"FAIL: ") + label);
 	}
 
 	public static void main(String[] args) {
@@ -380,10 +401,12 @@ public class bayad_nyo {
 // 	PAKI TEST NALANG NG PAYMENT, UTILITYBILL, and TENANTHASHTABLE
 		
 		/*	example code format:
-				check("No. #: Ano yung tinitest", object.method() == something) 			if numbers
-				check("No. #: Ano yung tinitest", object.method().equals("something")) 	if String
-				check("No. #: Ano yung tinitest", object.method()) 						if boolean (true/false) | !object.method() if expecting false
-				check("No. #: Ano yung tinitest", object.method() == null) 				if expecting null
+				check("No. # - Ano yung tinitest", object.method() == something) 			if numbers
+				check("No. # - Ano yung tinitest", object.method().equals("something")) 	if String
+				check("No. # - Ano yung tinitest", object.method()) 						if boolean (true/false) 
+												| !object.method() 							if expecting false
+												
+				check("No. # - Ano yung tinitest", object.method() == null) 				if expecting null
 				
 			expected ouput:
 				PASS: Ano yung tinitest
@@ -394,7 +417,7 @@ public class bayad_nyo {
 		
 		Tenant tenant = new Tenant("T001", "Juan Tamad", "A02", 2500.00);
 		//DITO START TEST SA Tenant class
-		
+	
 		
 		UtilityBill bill = new UtilityBill("B001", "Electricity", 350.00, "2026-10");
 		//DITO START TEST SA UtilityBill class
@@ -407,6 +430,7 @@ public class bayad_nyo {
 		TenantHashTable table = new TenantHashTable();
 		//DITO START TEST SA TenantHashTable class
 		
+//		table.printTable();
 		
 	}
 
