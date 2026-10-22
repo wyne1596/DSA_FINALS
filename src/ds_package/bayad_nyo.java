@@ -390,13 +390,23 @@ public class bayad_nyo {
 		
 // 	PAKI TEST NALANG NG PAYMENT AND UTILITYBILL
 
+//Familiarizing lang muna sa mga Class and methods to
+		  		  
 //Dito ka mag start zai UtilityBill class lang check mo
 //if PASS yung check then gumagana ng maayos if FAIL then may problem
 
 		  UtilityBill bill = new UtilityBill("B001", "Electricity", 350.00, "2026-10");
+
+		  check(bill.getBillID().equals("B001"));
+
+
+//Dito ka shello ichecheck mo yung mga methods ng class Payment
+//if PASS yung check then gumagana ng maayos if FAIL then may problem
 		  
-  check(bill.getBillID().equals("B001"));
+		  Payment payment = new Payment("P001", "2026-10-05", 2000.00, "RENT");
 		  
+		  check(payment.getPaymentID().equals("P001"));		
+  
 	}
 
 }
