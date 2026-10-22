@@ -370,43 +370,38 @@ class TenantHashTable{
 }
 
 public class bayad_nyo {
-	static void check(boolean condition){
-		System.out.println((condition ? "PASS":"FAIL"));
+	
+	static void check(String label, boolean condition){
+		System.out.println((condition ? "PASS":"FAIL" + label));
 	}
 
 	public static void main(String[] args) {
-//		TenantHashTable table = new TenantHashTable();
-//		OwnList<Tenant> list = new OwnArrayList<>();
-//	
-//		table.put("T-001", new Tenant("T-001", "Anna Cruz", "A20", 5000.00));
-//		table.put("T-002", new Tenant("T-002", "Juan Tamad", "B13", 2500.00));
-//		table.put("T-022", new Tenant("T-022", "Wyne Ben", "C01", 2000.00));
-//
-//		list = table.getAll();
-//		for(int i=0; i<list.size();i++){
-//			System.out.println(list.get(i));
-//		}
-//	Try lang to if nagana put and getAll
+
+// 	PAKI TEST NALANG NG PAYMENT, UTILITYBILL, and TENANTHASHTABLE
 		
-// 	PAKI TEST NALANG NG PAYMENT AND UTILITYBILL
-
-//Familiarizing lang muna sa mga Class and methods to
-		  		  
-//Dito ka mag start zai UtilityBill class lang check mo
-//if PASS yung check then gumagana ng maayos if FAIL then may problem
-
-		  UtilityBill bill = new UtilityBill("B001", "Electricity", 350.00, "2026-10");
-
-		  check(bill.getBillID().equals("B001"));
-
-
-//Dito ka shello ichecheck mo yung mga methods ng class Payment
-//if PASS yung check then gumagana ng maayos if FAIL then may problem
+		/*	e.g:
+				check("Ano yung tinitest", object.method() == something) if numbers
+				check("Ano yung tinitest", object.method().equals("something")) if String
+				check("Ano yung tinitest", object.method()) if boolean (true/false) | !object.method() if expecting false
+				check("Ano yung tinitest", object.method() == null) if expecting null
+		*/
+		
+		Tenant tenant = new Tenant("T001", "Juan Tamad", "A02", 2500.00);
+		//DITO START TEST SA Tenant class
+		
+		
+		UtilityBill bill = new UtilityBill("B001", "Electricity", 350.00, "2026-10");
+		//DITO START TEST SA UtilityBill class
+		
 		  
-		  Payment payment = new Payment("P001", "2026-10-05", 2000.00, "RENT");
-		  
-		  check(payment.getPaymentID().equals("P001"));		
-  
+		Payment payment = new Payment("P001", "2026-10-05", 2000.00, "RENT");
+		//DITO START TEST SA Payment class
+		
+		
+		TenantHashTable table = new TenantHashTable();
+		//DITO START TEST SA TenantHashTable class
+		
+		
 	}
 
 }
