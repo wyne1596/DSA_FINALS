@@ -370,7 +370,10 @@ class TenantHashTable{
 }
 
 public class bayad_nyo {
-	
+	static void check(boolean condition){
+		System.out.println((condition ? "PASS":"FAIL"));
+	}
+
 	public static void main(String[] args) {
 //		TenantHashTable table = new TenantHashTable();
 //		OwnList<Tenant> list = new OwnArrayList<>();
@@ -386,6 +389,14 @@ public class bayad_nyo {
 //	Try lang to if nagana put and getAll
 		
 // 	PAKI TEST NALANG NG PAYMENT AND UTILITYBILL
+
+//Dito ka mag start zai UtilityBill class lang check mo
+//if PASS yung check then gumagana ng maayos if FAIL then may problem
+
+		  UtilityBill bill = new UtilityBill("B001", "Electricity", 350.00, "2026-10");
+		  
+  check(bill.getBillID().equals("B001"));
+		  
 	}
 
 }
