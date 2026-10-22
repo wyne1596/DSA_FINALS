@@ -380,10 +380,10 @@ public class bayad_nyo {
 // 	PAKI TEST NALANG NG PAYMENT, UTILITYBILL, and TENANTHASHTABLE
 		
 		/*	example code format:
-				check("Ano yung tinitest", object.method() == something) 			if numbers
-				check("Ano yung tinitest", object.method().equals("something")) 	if String
-				check("Ano yung tinitest", object.method()) 						if boolean (true/false) | !object.method() if expecting false
-				check("Ano yung tinitest", object.method() == null) 				if expecting null
+				check("No. #: Ano yung tinitest", object.method() == something) 			if numbers
+				check("No. #: Ano yung tinitest", object.method().equals("something")) 	if String
+				check("No. #: Ano yung tinitest", object.method()) 						if boolean (true/false) | !object.method() if expecting false
+				check("No. #: Ano yung tinitest", object.method() == null) 				if expecting null
 				
 			expected ouput:
 				PASS: Ano yung tinitest
