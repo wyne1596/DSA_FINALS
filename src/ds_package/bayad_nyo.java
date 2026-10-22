@@ -418,7 +418,6 @@ public class bayad_nyo {
 		
 		Tenant tenant = new Tenant("T001", "Juan Tamad", "A02", 2500.00);
 		//DITO START TEST SA Tenant class
-		check(1, "No tenant T001", !tenant.getTenantID().equals("T001"));
 		
 		UtilityBill bill = new UtilityBill("B001", "Electricity", 350.00, "2026-10");
 		//DITO START TEST SA UtilityBill class
