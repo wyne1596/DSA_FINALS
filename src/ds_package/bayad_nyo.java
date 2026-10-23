@@ -417,17 +417,19 @@ public class bayad_nyo {
 		*/
 		
 		Tenant tenant = new Tenant("T001", "Juan Tamad", "A02", 2500.00);
+		UtilityBill bill = new UtilityBill("B001", "Electricity", 350.00, "2026-10");
+		Payment payment = new Payment("P001", "2026-10-05", 2000.00, "RENT");
+		TenantHashTable table = new TenantHashTable();
+		
 		//DITO START TEST SA Tenant class
 		
-		UtilityBill bill = new UtilityBill("B001", "Electricity", 350.00, "2026-10");
+		
 		//DITO START TEST SA UtilityBill class
+
 		
-		  
-		Payment payment = new Payment("P001", "2026-10-05", 2000.00, "RENT");
 		//DITO START TEST SA Payment class
+
 		
-		
-		TenantHashTable table = new TenantHashTable();
 		//DITO START TEST SA TenantHashTable class
 
 		
