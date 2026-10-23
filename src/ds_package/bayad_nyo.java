@@ -222,13 +222,21 @@ class Payment{
  									PAKI STUDY NG HASH TABLE
 */
 
-//di pa sure dito sa hash table
 class TenantHashTable{
 	private static final int INITIAL_CAPACITY = 11;				// eto yung bucket ng hashtable	
 	private static final double LOAD_FACTOR_THRESHOLD = 0.75;	//
 	
 	private Node[] table;	//
 	private int size;		// kung ilan na yung tenants na naka store
+	
+	// responsible for checking if a key is invalid
+	private boolean isInvalidKey(String key) {
+		if(key == null || key.trim().length() == 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 	// responsible sa paggawa ng empty table, yung initial capacity lang din slots nya
 	public TenantHashTable() {
@@ -263,6 +271,8 @@ class TenantHashTable{
 		int index = this.hash(key);
 	    Node current = this.table[index];
 	    
+	    if(isInvalidKey(key)) throw new IllegalArgumentException("Invalid Key or Value");
+	    
 	    while (current != null) {
 	        if (current.key.equals(key)) {
 	            current.value = value; 
@@ -288,6 +298,8 @@ class TenantHashTable{
 	public Tenant get(String key) {
 	    int index = this.hash(key);
 	    Node current = this.table[index];
+	    
+	    if(isInvalidKey(key)) return null;
 	    
 	    while (current != null) {
 	        if (current.key.equals(key)) {
@@ -315,6 +327,8 @@ class TenantHashTable{
 		Node previous = null;
 		int index = this.hash(key);
 		Node current = this.table[index];
+		
+		if(isInvalidKey(key)) return false;
 		
 		while(current != null) {
 			if(current.key.equals(key)) {
@@ -368,6 +382,7 @@ class TenantHashTable{
 		}
 	}
 	
+	
 //	public void printTable() {
 //		System.out.println("Capacity: " + table.length + " | Size: " + size);
 //		
@@ -391,48 +406,36 @@ class TenantHashTable{
 }
 
 public class bayad_nyo {
-	
 	static void check(int num, String label, boolean condition){
 		System.out.println((condition ? "PASS: ":"FAIL: ") + "No. " +num+ " - "+label);
 	}
-
+	
 	public static void main(String[] args) {
-
-// 	PAKI TEST NALANG NG PAYMENT, UTILITYBILL, and TENANTHASHTABLE
+//	 	PAKI TEST NALANG NG PAYMENT, UTILITYBILL, and TENANTHASHTABLE
 		
-		/*	example code format:
-				check(No.#, "Ano yung tinitest", object.method() == something) 			if numbers
-				check(No.#, "Ano yung tinitest", object.method().equals("something")) 	if String
-				check(No.#, "Ano yung tinitest", object.method()) 						if boolean (true/false) 
-												!object.method() 						if expecting false
-												
-				check(No.#, "Ano yung tinitest", object.method() == null) 				if expecting null
-																  != null				if NOT expecting null
-			
-			expected output:
-				PASS: No. # - Ano yung tinitest
-				FAIL: No. # - Ano yung tinitest
+			/*	example code format:
+					check(No.#, "Ano yung tinitest", object.method() == something) 			if numbers
+					check(No.#, "Ano yung tinitest", object.method().equals("something")) 	if String
+					check(No.#, "Ano yung tinitest", object.method()) 						if boolean (true/false) 
+													!object.method() 						if expecting false
+													
+					check(No.#, "Ano yung tinitest", object.method() == null) 				if expecting null
+																	  != null				if NOT expecting null
+				
+				expected output:
+					PASS: No. # - Ano yung tinitest
+					FAIL: No. # - Ano yung tinitest
 
-			PEDE gumamit ng AI or magtanong sa programmer if nahihirapan
-		*/
-		
+				PEDE gumamit ng AI or magtanong sa programmer if nahihirapan
+			*/
+
 		Tenant tenant = new Tenant("T001", "Juan Tamad", "A02", 2500.00);
 		UtilityBill bill = new UtilityBill("B001", "Electricity", 350.00, "2026-10");
 		Payment payment = new Payment("P001", "2026-10-05", 2000.00, "RENT");
 		TenantHashTable table = new TenantHashTable();
-		
-		//DITO START TEST SA Tenant class
-		
-		
-		//DITO START TEST SA UtilityBill class
 
-		
-		//DITO START TEST SA Payment class
 
-		
-		//DITO START TEST SA TenantHashTable class
 
-		
 	}
 
 }
