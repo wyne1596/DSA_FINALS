@@ -1,4 +1,248 @@
 package ds_package;
+import java.util.Scanner;
+
+public class bayad_nyo {
+	static Scanner sc = new Scanner(System.in);
+	static TrackerService service = new TrackerService();
+	
+	public static void println(Object obj) {
+		System.out.println(obj);
+	}
+	
+	public static void print(Object obj) {
+		System.out.print(obj);
+	}
+	
+	public static void clearScreen() {
+		System.out.println("\033[H\033[2J");
+		System.out.flush();
+	}
+	
+	public static void header(String head) {
+		String header = head;
+		String bar = "\u2550".repeat(header.length());
+		print("\u2554" + bar + "\u2557\n\u2551" + header + "\u2551\n\u255A" + bar + "\u255D\n");
+	}
+	
+	public static void header(String head, int width) {
+		String header = head;
+		int left = (width - header.length()) / 2;
+		String bar = "\u2550".repeat(width);
+		String line = " ".repeat(left) + header + " ".repeat(width - header.length() - left);
+		print("\u2554" + bar + "\u2557\n\u2551" + line + "\u2551\n\u255A" + bar + "\u255D\n");
+	}
+	
+	static void pause() {
+		sc.nextLine();
+	    println("\n - PRESS ENTER TO CONTINUE - ");
+	    sc.nextLine();
+	}
+	
+	static void registerTenant() {
+		sc.nextLine();
+		print("Enter Name (Fname Lname): ");
+		String name = sc.nextLine().toUpperCase();
+		print("Enter Unit (A00): ");
+		String unit = sc.nextLine().toUpperCase();
+		print("Enter Monthly Rent: ");
+		double rent = sc.nextDouble();
+		
+		String id = service.registerTenant(name,unit,rent);
+		
+		if(id != null) {
+			sc.nextLine();
+			println("\nTenant Registered to "+id+".");
+		}
+		else {
+			sc.nextLine();
+			println("Tenant FAILED to Register\n");
+		}
+	}
+
+	static void recordBill() {
+		sc.nextLine();
+		print("Enter Tenant ID (T-000): ");
+		String tenantID = sc.nextLine().toUpperCase();
+		print("Enter Type (WATER OR ELECTRICITY OR BOTH): ");
+		String type = sc.nextLine().toUpperCase();
+		print("Enter Date (YYYY-MM): ");
+		String month = sc.nextLine();
+		print("Enter Amount: ");
+		double amount = sc.nextDouble();
+		
+		String billID = service.addUtilityBill(tenantID, type, amount, month);
+		
+		if(billID != null) {
+			println("Utility Bill Recorded to "+tenantID+".\n");
+		}
+		else if(service.findTenant(tenantID) == null) {
+			println("NO tenant "+tenantID+" found.\n");
+		}
+		else {
+			println("Utility Bill FAILED to Record\n");
+		}
+	}
+	
+	static void recordPayment() {
+		sc.nextLine();
+		print("Enter Tenant ID (T-000): ");
+		String tenantID = sc.nextLine().toUpperCase();
+		print("Enter Date (YYYY-MM-DD): ");
+		String date = sc.nextLine();
+		print("Enter Amount: ");
+		double amount = sc.nextDouble();
+		sc.nextLine();
+		print("Applied to (Rent | Utility): ");
+		String applied = sc.nextLine().toUpperCase();;
+		
+		String paymentID = service.recordPayment(tenantID, date, amount, applied);
+		
+		if(paymentID != null) {
+			println("Payment Recorded to "+tenantID+".\n");
+		}
+		else if(service.findTenant(tenantID) == null) {
+			println("NO tenant "+tenantID+" found.\n");
+		}
+		else {
+			println("Payment FAILED to Record\n");
+		}
+	}
+	
+	static void viewTenant() {
+		sc.nextLine();
+		print("Enter Tenant ID (T-000): ");
+		String tenantID = sc.nextLine().toUpperCase();
+		
+		if(service.findTenant(tenantID) != null) {
+			println(service.findTenant(tenantID).toString());
+			println(service.toString());
+		}
+		else if(service.findTenant(tenantID) == null) {
+			println("NO tenant "+tenantID+" found.\n");
+		}
+		else {
+			println("Payment FAILED to Record\n");
+		}
+	}
+	
+	static void viewAllTenant() {
+		OwnList<Tenant> list = service.getAllTenants();
+		
+		if(list.isEmpty()) println("No tenants found.");
+		else {
+			println("HEAD");
+			for(int i=0; i <= list.size() - 1; i++) {
+				System.out.println(list.get(i));
+			}
+			println("NULL");
+		}
+	}
+	
+	static void chargeMonthlyRent() {
+		sc.nextLine();
+		print("Enter Tenant ID (T-000): ");
+		String tenantID = sc.nextLine().toUpperCase();
+	
+		Tenant tenant = service.findTenant(tenantID);
+		if(tenantID == null) println("No tenant "+tenantID+" found.");
+		else {
+			service.chargeMonthlyRent(tenantID);
+			println(String.format("Added ₱%.2f to %s", tenant.getMonthlyRent(), tenantID));
+		}
+	}
+	
+	static void listOutstanding() {
+		OwnList<Tenant> list = service.getOutstandingBalance();
+		
+		if(list == null) println("No tenants found.");
+		else {
+			System.out.println("HEAD");
+			for(int i=0; i <= list.size() - 1; i++) {
+				println(list.get(i));
+			}
+			println("NULL");
+		}
+	}
+	
+	static void viewHashTable() {
+		service.viewHashTable();
+	}
+	
+	public static void main(String[] args) {
+		service.registerTenant("Wyne Ben", "A02", 2500);
+		service.registerTenant("Test Some", "A01", 2300);
+		service.addUtilityBill("T-001", "WATER", 250, "2026-10");
+		service.recordPayment("T-001", "2026-11-09", 50, "UTILITY");
+		service.recordPayment("T-001", "2026-11-10", 50, "UTILITY");
+		service.recordPayment("T-001", "2026-11-11", 50, "UTILITY");
+		
+		header(" RENT & UTILITY BILLS TRACKER ");
+		println("\n - PRESS ENTER TO CONTINUE - ");
+		sc.nextLine();
+		
+		boolean UI = true;
+		while(UI) {
+			clearScreen();
+			header(" MENU ", 30);
+
+			println("1. Register Tenant");
+			println("2. Record Utility Bill");
+			println("3. Record Payment");
+			println("4. View Tenant");
+			println("5. List All Tenants");
+			println("6. Charge Monthly Rent");
+			println("7. List Outstanding Balance");
+			println("8. View Hash Table");
+			println("0. Exit");
+			print("\n\nInput: ");
+			int input = sc.nextInt();
+			
+			if(input == 1) {
+				registerTenant();
+				pause();
+			}
+			else if(input == 2) {
+				recordBill();
+				pause();
+			}
+			else if(input == 3) {
+				recordPayment();
+				pause();
+			}
+			else if(input == 4) {
+				viewTenant();
+				pause();
+			}
+			else if(input == 5) {
+				viewAllTenant();
+				pause();
+			}
+			else if(input == 6) {
+				chargeMonthlyRent();
+				pause();
+			}
+			else if(input == 7) {
+				listOutstanding();
+				pause();
+			}
+			else if(input == 8) {
+				viewHashTable();
+				pause();
+			}
+			else if(input == 0) {
+				println("Thank you for using the System.");
+				pause();
+				UI = false;
+			}
+			else {
+				println("Invalid Input");
+				pause();
+			}
+		}
+		
+	}
+
+}
 
 //Thank you Claude
 interface OwnList<T>{
@@ -67,8 +311,10 @@ class OwnArrayList<T> implements OwnList<T>{
 
 //this is ung data for Tenant
 //nandito yung PersoDetails, balance, and payment and bill history
+
+
 class Tenant {
-	private String tenantID;	//unique ID to na gamit din sa HASH TABLE key naka read only lang to so unchangeable
+	private final String tenantID;	//unique ID to na gamit din sa HASH TABLE key naka read only lang to so unchangeable
 	private String tenantName;
 	private String unitNo;		//read only lang din to
 	private double monthlyRent;
@@ -124,7 +370,7 @@ class Tenant {
     	int totalPayments = this.payments.size();
     	
     	return String.format(
-    			"Tenant [ID: %s | Name: %s | Unit: %s | Monthly Rent: ₱%.2f | Balance: ₱%.2f | Payments: %d]",
+    			"| ID: %s | Name: %s | Unit: %s | Monthly Rent: ₱%.2f | Balance: ₱%.2f | Payments: %d |",
 				this.tenantID,
 				this.tenantName,
 				this.unitNo,
@@ -218,10 +464,6 @@ class Payment{
 }
 
 
-/* 
- 									PAKI STUDY NG HASH TABLE
-*/
-
 class TenantHashTable{
 	private static final int INITIAL_CAPACITY = 11;				// eto yung bucket ng hashtable	
 	private static final double LOAD_FACTOR_THRESHOLD = 0.75;	//
@@ -268,10 +510,9 @@ class TenantHashTable{
 	// eto yung nag aadd ng tenant sa buong table. True return if bago yung key. False return if nireplaced lang yung existing tenant
 	// eto din pala yung nag reresize if yung load factor is exceeded na
 	public boolean put(String key, Tenant value) {
+	    if(isInvalidKey(key) || value == null) throw new IllegalArgumentException("Invalid Key or Value");
 		int index = this.hash(key);
 	    Node current = this.table[index];
-	    
-	    if(isInvalidKey(key)) throw new IllegalArgumentException("Invalid Key or Value");
 	    
 	    while (current != null) {
 	        if (current.key.equals(key)) {
@@ -296,10 +537,9 @@ class TenantHashTable{
 	
 	// eto yung rereturn nya yung tenant/ mga values ng tenant if cinall ung key. Null naman if wala yng key na cinall
 	public Tenant get(String key) {
+	    if(isInvalidKey(key)) return null;
 	    int index = this.hash(key);
 	    Node current = this.table[index];
-	    
-	    if(isInvalidKey(key)) return null;
 	    
 	    while (current != null) {
 	        if (current.key.equals(key)) {
@@ -324,11 +564,10 @@ class TenantHashTable{
 	
 	// eto yung responsible sa pag remove ng tenant. mag rereturn to ng true if naremoved yung tenant, and false if wala yung tenant na yon sa table
 	public boolean remove(String key) {
+		if(isInvalidKey(key)) return false;
 		Node previous = null;
 		int index = this.hash(key);
 		Node current = this.table[index];
-		
-		if(isInvalidKey(key)) return false;
 		
 		while(current != null) {
 			if(current.key.equals(key)) {
@@ -383,59 +622,122 @@ class TenantHashTable{
 	}
 	
 	
-//	public void printTable() {
-//		System.out.println("Capacity: " + table.length + " | Size: " + size);
-//		
-//		for(int i=0; i < table.length; i++) {
-//			System.out.print("["+i+"]");
-//			Node current = table[i];
-//			
-//			if(current == null) {
-//				System.out.println("Empty");
-//			}
-//			
-//			while(current != null) {
-//				System.out.println(current.key);
-//				if(current.next != null) {
-//					current = current.next;
-//				}
-//			System.out.println();
-//			}
-//		}
-//	}
+	public void printTable() {
+		System.out.println("Capacity: " + table.length + " | Size: " + size);
+		
+		for(int i=0; i < table.length; i++) {
+			System.out.print("["+i+"] ");
+			Node current = table[i];
+			if(current == null) System.out.print("Empty");
+			while(current != null) {
+				System.out.print(current.key);
+				if(current.next != null) System.out.print(" -> ");
+				current = current.next;
+			}
+			System.out.println();
+		}
+	}
 }
 
-public class bayad_nyo {
-	static void check(int num, String label, boolean condition){
-		System.out.println((condition ? "PASS: ":"FAIL: ") + "No. " +num+ " - "+label);
+class TrackerService {
+	private TenantHashTable table;
+	private int nextTenant = 1;
+	private int nextBill = 1;
+	private int nextPayment = 1;
+	
+	public TrackerService() {
+	    this.table = new TenantHashTable();
 	}
 	
-	public static void main(String[] args) {
-//	 	PAKI TEST NALANG NG PAYMENT, UTILITYBILL, and TENANTHASHTABLE
+	public String registerTenant(String name, String unit, double rent) {
+		if (name == null || unit == null) return null;
+		if (name.trim().length() == 0 || unit.trim().length() == 0) return null;
+		if(rent <= 0) return null;
 		
-			/*	example code format:
-					check(No.#, "Ano yung tinitest", object.method() == something) 			if numbers
-					check(No.#, "Ano yung tinitest", object.method().equals("something")) 	if String
-					check(No.#, "Ano yung tinitest", object.method()) 						if boolean (true/false) 
-													!object.method() 						if expecting false
-													
-					check(No.#, "Ano yung tinitest", object.method() == null) 				if expecting null
-																	  != null				if NOT expecting null
-				
-				expected output:
-					PASS: No. # - Ano yung tinitest
-					FAIL: No. # - Ano yung tinitest
-
-				PEDE gumamit ng AI or magtanong sa programmer if nahihirapan
-			*/
-
-		Tenant tenant = new Tenant("T001", "Juan Tamad", "A02", 2500.00);
-		UtilityBill bill = new UtilityBill("B001", "Electricity", 350.00, "2026-10");
-		Payment payment = new Payment("P001", "2026-10-05", 2000.00, "RENT");
-		TenantHashTable table = new TenantHashTable();
-
-
-
+		String id = "T-" + String.format("%03d", nextTenant);
+		if(table.containsKey(id)) return null;
+		
+		table.put(id, new Tenant(id, name, unit, rent));
+		nextTenant++;
+		return id;
 	}
-
+	
+	public Tenant findTenant(String id) {
+		if(id == null || id.trim().length() == 0) return null;
+		
+		return table.get(id.trim());
+	}
+	
+	public String addUtilityBill(String id, String type, double amount, String month) {
+		Tenant tenant = findTenant(id);
+		
+		if(tenant == null) return null;
+		if(amount <= 0) return null;
+		
+		String billID = "B-" + String.format("%03d", nextBill);
+		tenant.addUtilityBill(new UtilityBill(billID, type, amount, month));
+		tenant.setCurrentBalance(tenant.getCurrentBalance() + amount);
+		nextBill++;
+		return billID;
+	}
+	
+	public String recordPayment(String id, String date, double amount, String appliedTo) {
+		Tenant tenant = findTenant(id);
+		
+		String paymentID = "P-" + String.format("%03d", nextPayment);
+		
+		if(tenant == null) return null;
+		if(amount <= 0) return null;
+		
+		tenant.addPayment(new Payment(paymentID, date, amount, appliedTo));
+		tenant.setCurrentBalance(tenant.getCurrentBalance() - amount);
+		nextPayment++;
+		return paymentID;
+	}
+	
+	public boolean chargeMonthlyRent(String id) {
+		Tenant tenant = findTenant(id);
+		
+		if(tenant == null) return false;
+		
+		tenant.setCurrentBalance(tenant.getCurrentBalance() + tenant.getMonthlyRent());
+		return true;
+	}
+	
+	public boolean updateTenant(String id, String newName, double newRent) {
+		Tenant tenant = findTenant(id);
+		
+		if(tenant == null) return false;
+		if(newName.trim().length() == 0 || newRent <= 0) return false;
+		
+		tenant.setTenantName(newName);
+		tenant.setMonthlyRent(newRent);
+		return true;
+	}
+	
+	public boolean removeTenant(String id) {
+		if(id == null || id.trim().length() == 0) return false;
+		
+		return table.remove(id.trim());
+	}
+	
+	public OwnList<Tenant> getOutstandingBalance(){
+		OwnList<Tenant> all = table.getAll();
+		OwnList<Tenant> result = new OwnArrayList<>();
+		
+		for(int i=0; i<all.size(); i++) {
+			if(all.get(i).getCurrentBalance() > 0) {
+				result.add(all.get(i));
+			}
+		}		
+		return result;
+	}
+	
+	public OwnList<Tenant> getAllTenants(){
+		return table.getAll();
+	}
+	
+	public void viewHashTable() {
+		table.printTable();
+	}
 }
